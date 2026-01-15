@@ -1,1 +1,1 @@
-{"root":["./src/idgeneration.ts","./src/index.ts"],"version":"5.9.3"}
+{"root":["./src/awss3.ts","./src/files.ts","./src/idgeneration.ts","./src/index.ts"],"version":"5.9.3"}
