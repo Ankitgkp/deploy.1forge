@@ -3,15 +3,15 @@ import simpleGit from 'simple-git';
 const { generate } = require('./idgeneration')
 const app = express()
 app.use(express.json())
-app.use(cors())
 
 
 app.post('/deploy', (req, res) => {
-    const url = req.body.url
-
+    const Giturl = req.body.url
+    const id = generate()
+    simpleGit().clone(Giturl, `output/${id}`)
 
     res.json({
-        message: "Hello From the Uplaod Server"
+        id: id
     })
 })
 
