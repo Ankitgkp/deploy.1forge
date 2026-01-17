@@ -1,13 +1,16 @@
 import express from 'express';
 import simpleGit from 'simple-git';
-import { getFiles } from './files';
 import path from 'path'
-const { generate } = require('./idgeneration')
-import { uploadFiletoS3 } from './awsS3';
 import 'dotenv/config'
-
 const app = express()
 app.use(express.json())
+import { uploadFiletoS3 } from './awsS3';
+import { getFiles } from './files';
+const { generate } = require('./idgeneration')
+import { createClient } from 'redis';
+const publisher = createClient();
+publisher.connect()
+
 
 app.post('/deploy', async (req, res) => {
     const Giturl = req.body.url
@@ -19,6 +22,9 @@ app.post('/deploy', async (req, res) => {
     files.forEach(async file => {
         await uploadFiletoS3(file.slice(__dirname.length + 1), file);
     })
+
+    publisher.lPush('build-queue', id);
+    
 
 
     res.json({
